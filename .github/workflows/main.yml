@@ -36,14 +36,12 @@ jobs:
         python -m pip install --upgrade pip 
         pip install flake8==6.0.0 flake8-isort==6.0.0
         pip install -r ./backend/requirements.txt 
-    # Этот шаг дополним переменными для доступа к БД
     - name: Test with flake8 and django tests
       # Добавляем env-переменные для доступа к БД
       env:
         POSTGRES_USER: django_user
         POSTGRES_PASSWORD: django_password
         POSTGRES_DB: django_db
-        # Сервер БД запущен в Docker, но его порт проброшен на хост
         # Поэтому подключаемся к 127.0.0.1:5432
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
@@ -97,20 +95,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up nodeJS
-      # Это готовый воркфлоу для установки Node.js на раннер
       uses: actions/setup-node@v3
       with:
-        # Это параметр воркфлоу, указывающий нужную версию Node.js
         node-version: 18
-
     - name: Install dependencies
-      # Эта команда устанавливает зависимости для фронтенда
       run: |
         cd frontend/
         npm ci
 
     - name: Test frontend
-      # Запускаем тесты
       run: |
         cd frontend/
         npm run test
